@@ -1,11 +1,20 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { authService, userService, tokenService, emailService } = require('../services');
+const { authService, userService, tokenService, emailService, freelancerService } = require('../services');
+const ApiError = require('../utils/ApiError');
 
-const register = catchAsync(async (req, res) => {
+const registerFreelancer = catchAsync(async (req, res) => {
   const user = await userService.createUser(req.body);
-  const tokens = await tokenService.generateAuthTokens(user);
-  res.status(httpStatus.CREATED).send({ user, tokens });
+
+  if (req.body.role === 'freelancer') {
+    const freelancerBody = { userId: user._id };
+    await freelancerService.createFreelancer(freelancerBody);
+    const tokens = await tokenService.generateAuthTokens(user);
+    res.status(httpStatus.CREATED).send({ user, tokens });
+  } else if (req.body.role === 'client') {
+  }
+
+  throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid Role');
 });
 
 const login = catchAsync(async (req, res) => {
@@ -48,12 +57,12 @@ const verifyEmail = catchAsync(async (req, res) => {
 });
 
 module.exports = {
-  register,
   login,
   logout,
-  refreshTokens,
-  forgotPassword,
-  resetPassword,
-  sendVerificationEmail,
   verifyEmail,
+  refreshTokens,
+  resetPassword,
+  forgotPassword,
+  sendVerificationEmail,
+  registerFreelancer,
 };
