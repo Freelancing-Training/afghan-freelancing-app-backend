@@ -49,6 +49,34 @@ const freelancerSchema = mongoose.Schema(
         },
       },
     ],
+    education: [
+      {
+        school: {
+          type: String,
+          required: true,
+        },
+        degree: {
+          type: String,
+          required: true,
+        },
+        fieldOfStudy: {
+          type: String,
+          required: true,
+        },
+        toDate: {
+          type: Date,
+          required: true,
+        },
+        fromDate: {
+          type: Date,
+          required: true,
+        },
+        description: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
     languages: [
       {
         languages: String,
@@ -65,6 +93,12 @@ const freelancerSchema = mongoose.Schema(
     ],
     biography: String,
     rate: Number,
+    imageUrl: String,
+    dob: Date,
+    province: String,
+    street: String,
+    zipCode: String,
+    phoneNumber: String,
   },
   {
     timestamps: true,

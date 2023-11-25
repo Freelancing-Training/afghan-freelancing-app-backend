@@ -75,6 +75,7 @@ const addLocation = {
     zipCode: Joi.number().required(),
     phoneNumber: Joi.number().required(),
     dob: Joi.date().iso().required(),
+    photo: Joi.string().required(),
   }),
 };
 
