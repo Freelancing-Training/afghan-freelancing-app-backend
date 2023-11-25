@@ -13,6 +13,7 @@ const { authLimiter } = require('./middlewares/rateLimiter');
 const routes = require('./routes');
 const { errorConverter, errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
+const path = require('path');
 
 const app = express();
 
@@ -52,6 +53,9 @@ if (config.env === 'production') {
 
 // api routes
 app.use(routes);
+
+// static route for images
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // send back a 404 error for any unknown api request
 app.use((req, res, next) => {
