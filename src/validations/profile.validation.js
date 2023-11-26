@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-const title = {
+const addTitle = {
   body: Joi.object()
     .keys({
       title: Joi.string(),
@@ -80,7 +80,7 @@ const addLocation = {
 };
 
 module.exports = {
-  title,
+  addTitle,
   addSkills,
   addLocation,
   languages,

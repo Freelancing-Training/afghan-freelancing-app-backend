@@ -48,6 +48,7 @@ const addExperience = (freelancerId, experienceBody) => {
  * @returns {Promise<Freelancer>}
  */
 const addEducation = (freelancerId, educationBody) => {
+  console.log({ educationBody });
   return Freelancer.findOneAndUpdate({ _id: freelancerId }, { $push: { educations: educationBody } });
 };
 

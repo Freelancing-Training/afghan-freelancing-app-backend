@@ -6,7 +6,4 @@ const auth = require('../middlewares/auth');
 
 const router = express.Router();
 
-router.route('/').patch(auth(), validate(profileValidation.updateProfile), profileController.updateProfile);
-router.route('/experience').post(auth(), validate(profileValidation.addExperience), profileController.addExperience);
-
 module.exports = router;

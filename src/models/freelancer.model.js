@@ -49,7 +49,7 @@ const freelancerSchema = mongoose.Schema(
         },
       },
     ],
-    education: [
+    educations: [
       {
         school: {
           type: String,
@@ -79,7 +79,7 @@ const freelancerSchema = mongoose.Schema(
     ],
     languages: [
       {
-        languages: String,
+        language: String,
         proficiency: {
           type: String,
           enum: ['Native', 'Fluent', 'Conversational', 'Basic'],
@@ -93,7 +93,7 @@ const freelancerSchema = mongoose.Schema(
     ],
     biography: String,
     rate: Number,
-    imageUrl: String,
+    photo: String,
     dob: Date,
     province: String,
     street: String,
