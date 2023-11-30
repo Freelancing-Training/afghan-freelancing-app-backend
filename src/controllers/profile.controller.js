@@ -2,7 +2,7 @@ const httpStatus = require('http-status');
 const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
-const { freelancerService } = require('../services');
+const { freelancerService, clientService } = require('../services');
 
 const addTitle = catchAsync(async (req, res) => {
   const { user } = req;
@@ -143,13 +143,14 @@ const getProfile = catchAsync(async (req, res) => {
   const { user } = req;
   if (user.role === 'freelancer') {
     const freelancer = await freelancerService.findFreelancerByUserId(user._id);
-    if (!freelancer) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'Freelancer Not Found');
-    }
+    if (!freelancer) throw new ApiError(httpStatus.NOT_FOUND, 'Freelancer Not Found');
     return res.status(httpStatus.OK).send({ user: freelancer });
   } else if (user.role === 'client') {
+    const client = await clientService.findClientByUserId(user._id);
+    if (!client) throw new ApiError(httpStatus.NOT_FOUND);
+    return res.status(httpStatus.OK).send({ user: client });
   }
-
+  // if user is not client and not a freelancer
   throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid Role');
 });
 
