@@ -5,6 +5,7 @@ const docsRoute = require('./docs.route');
 const config = require('../config/config');
 const freelancerRoutes = require('./freelancer.route');
 const profileRoutes = require('./profile.route');
+const jobsRoutes = require('./job.route');
 
 const router = express.Router();
 
@@ -17,10 +18,10 @@ const defaultRoutes = [
     path: '/users',
     route: userRoute,
   },
-  // {
-  //   path: '/freelancers',
-  //   route: freelancerRoutes,
-  // },
+  {
+    path: '/jobs',
+    route: jobsRoutes,
+  },
   {
     path: '/profile',
     route: profileRoutes,

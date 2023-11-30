@@ -1,6 +1,4 @@
-const httpStatus = require('http-status');
 const { Client } = require('../models');
-const ApiError = require('../utils/ApiError');
 
 /**
  * Create a Client
@@ -12,7 +10,7 @@ const createClient = async (clientBody) => {
 };
 
 /**
- * Create a Client
+ * find a Client by user id
  * @param {ObjectId} userId
  * @returns {Promise<Client>}
  */
@@ -20,7 +18,17 @@ const findClientByUserId = (userId) => {
   return Client.findOne({ userId });
 };
 
+/**
+ * find client id
+ * @param {ObjectId} id
+ * @returns {Promise<Client>}
+ */
+const findById = (id) => {
+  return Client.findById(id);
+};
+
 module.exports = {
+  findById,
   createClient,
   findClientByUserId,
 };
