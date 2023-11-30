@@ -8,7 +8,7 @@ const registerFreelancer = {
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
     acceptTerms: Joi.boolean(),
-    role: Joi.string().required().valid('freelancer'),
+    role: Joi.string().required().valid('freelancer', 'client'),
   }),
 };
 

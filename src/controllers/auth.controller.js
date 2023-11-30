@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { authService, userService, tokenService, emailService, freelancerService } = require('../services');
+const { authService, userService, tokenService, emailService, freelancerService, clientService } = require('../services');
 const ApiError = require('../utils/ApiError');
 
 const registerFreelancer = catchAsync(async (req, res) => {
@@ -12,6 +12,10 @@ const registerFreelancer = catchAsync(async (req, res) => {
     const tokens = await tokenService.generateAuthTokens(user);
     res.status(httpStatus.CREATED).send({ user, tokens });
   } else if (req.body.role === 'client') {
+    const clientBody = { userId: user._id };
+    await clientService.createClient(clientBody);
+    const tokens = await tokenService.generateAuthTokens(user);
+    res.status(httpStatus.CREATED).send({ user, tokens });
   }
 
   throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid Role');
