@@ -25,7 +25,7 @@ const paginate = (schema) => {
       const sortingCriteria = [];
       options.sortBy.split(',').forEach((sortOption) => {
         const [key, order] = sortOption.split(':');
-        sortingCriteria.push((order === 'desc' ? '-' : '') + key);
+        sortingCriteria.push((order === 'asc' ? '-' : '') + key);
       });
       sort = sortingCriteria.join(' ');
     } else {
@@ -50,7 +50,7 @@ const paginate = (schema) => {
       });
     }
 
-    docsPromise = docsPromise.exec();
+    docsPromise = docsPromise.lean().exec();
 
     return Promise.all([countPromise, docsPromise]).then((values) => {
       const [totalResults, results] = values;

@@ -6,5 +6,8 @@ const auth = require('../middlewares/auth');
 
 const router = express.Router();
 
-router.route('/').post(auth(), validate(jobValidation.addJob), jobController.addJob);
+router
+  .route('/')
+  .post(auth(), validate(jobValidation.addJob), jobController.addJob)
+  .get(auth(), validate({}), jobController.getJobs);
 module.exports = router;
