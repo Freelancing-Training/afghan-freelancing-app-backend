@@ -48,7 +48,6 @@ const addExperience = (freelancerId, experienceBody) => {
  * @returns {Promise<Freelancer>}
  */
 const addEducation = (freelancerId, educationBody) => {
-  console.log({ educationBody });
   return Freelancer.findOneAndUpdate({ _id: freelancerId }, { $push: { educations: educationBody } });
 };
 
@@ -102,7 +101,17 @@ const addLocation = (freelancerId, locationBody) => {
   return Freelancer.findOneAndUpdate({ _id: freelancerId }, { $set: { ...locationBody } });
 };
 
+/**
+ * find freelancer by id
+ * @param {import('mongoose').ObjectId} freelancerId
+ * @returns {Promise<Freelancer>}
+ */
+const findById = (freelancerId) => {
+  return Freelancer.findById(freelancerId);
+};
+
 module.exports = {
+  findById,
   addSkills,
   addLocation,
   addLanguages,
