@@ -10,4 +10,6 @@ router
   .route('/')
   .post(auth(), validate(jobValidation.addJob), jobController.addJob)
   .get(auth(), validate({}), jobController.getJobs);
+
+router.route('/:jobId').get(auth(), validate(jobValidation.getJob), jobController.getJob);
 module.exports = router;

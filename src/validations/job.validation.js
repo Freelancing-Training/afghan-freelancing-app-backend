@@ -16,6 +16,13 @@ const addJob = {
   }),
 };
 
+const getJob = {
+  params: Joi.object().keys({
+    jobId: Joi.string().required().custom(objectId),
+  }),
+};
+
 module.exports = {
+  getJob,
   addJob,
 };

@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { clientService, jobService } = require('../services');
+const { clientService, jobService, freelancerService, proposalService, userService } = require('../services');
 const ApiError = require('../utils/ApiError');
 const pick = require('../utils/pick');
 
@@ -19,7 +19,27 @@ const getJobs = catchAsync(async (req, res) => {
   return res.json(jobs);
 });
 
+const getJob = catchAsync(async (req, res) => {
+  const { jobId } = req.params;
+  const freelancer = await freelancerService.findFreelancerByUserId(req.user._id);
+  if (!freelancer) throw new ApiError(httpStatus.NOT_FOUND, 'Freelancer Not Found');
+  const job = await jobService.findById(jobId);
+  if (!job) throw new ApiError(httpStatus.NOT_FOUND, 'Job not found');
+  const jobProposal = await proposalService.findFreelancerJobProposal(job._id, freelancer._id);
+  const client = await clientService.findById(job.userId);
+  const user = await userService.getUserById(client.userId);
+  const newClient = {
+    imageUrl: client.imageUrl,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    location: client.province,
+    createdAt: user.createdAt,
+  };
+  return res.status(httpStatus.OK).send({ job, client: newClient, applied: !!jobProposal });
+});
+
 module.exports = {
   addJob,
+  getJob,
   getJobs,
 };

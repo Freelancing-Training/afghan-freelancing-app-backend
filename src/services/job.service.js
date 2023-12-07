@@ -17,12 +17,28 @@ const getJobs = () => {
   return Job.paginate();
 };
 
-const queryJobs = async (filter, options) => {
+/**
+ * query on jobs
+ * @param {Object} filter
+ * @param {Object} options
+ * @returns {Promise<Job>}
+ */
+const queryJobs = (filter, options) => {
   return Job.paginate(filter, options);
+};
+
+/**
+ * find job by id
+ * @param {ObjectId} jobId
+ * @returns {Promise<Job>}
+ */
+const findById = (jobId) => {
+  return Job.findById(jobId);
 };
 
 module.exports = {
   getJobs,
+  findById,
   createJob,
   queryJobs,
 };
