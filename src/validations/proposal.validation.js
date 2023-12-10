@@ -3,7 +3,6 @@ const { password, objectId } = require('./custom.validation');
 
 const createProposal = {
   body: Joi.object().keys({
-    freelancerId: Joi.string().required().custom(objectId),
     jobId: Joi.string().required().custom(objectId),
     description: Joi.string().required(),
     rate: Joi.number().required(),

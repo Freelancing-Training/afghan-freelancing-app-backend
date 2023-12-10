@@ -3,7 +3,7 @@ const { toJSON, paginate } = require('./plugins');
 
 const jobSchema = mongoose.Schema(
   {
-    userId: {
+    clientId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Client',
       required: true,

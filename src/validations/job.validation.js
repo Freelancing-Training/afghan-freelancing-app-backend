@@ -6,7 +6,7 @@ const addJob = {
     title: Joi.string().required(),
     description: Joi.string().required(),
     rate: Joi.number().required(),
-    userId: Joi.string().required().custom(objectId),
+    clientId: Joi.string().required().custom(objectId),
     keywords: Joi.array()
       .items({
         name: Joi.string().required(),
