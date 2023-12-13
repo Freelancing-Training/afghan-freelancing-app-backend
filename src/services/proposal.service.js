@@ -88,7 +88,7 @@ const findAllProposals = (freelancerId) => {
 };
 
 /**
- * find user all proposals
+ * count user all proposals
  * @param {ObjectId} freelancerId
  * @returns {Promise<Proposal>}
  */

@@ -5,8 +5,8 @@ const ApiError = require('../utils/ApiError');
 const pick = require('../utils/pick');
 
 const addJob = catchAsync(async (req, res) => {
-  const { userId } = req.body;
-  const client = await clientService.findById(userId);
+  const { clientId } = req.body;
+  const client = await clientService.findById(clientId);
   if (!client) throw new ApiError(httpStatus.NOT_FOUND, 'Client not found with the id');
   const job = await jobService.createJob(req.body);
   return res.status(httpStatus.CREATED).send(job);
@@ -26,7 +26,7 @@ const getJob = catchAsync(async (req, res) => {
   const job = await jobService.findById(jobId);
   if (!job) throw new ApiError(httpStatus.NOT_FOUND, 'Job not found');
   const jobProposal = await proposalService.findFreelancerJobProposal(job._id, freelancer._id);
-  const client = await clientService.findById(job.userId);
+  const client = await clientService.findById(job.clientId);
   const user = await userService.getUserById(client.userId);
   const newClient = {
     imageUrl: client.imageUrl,
@@ -38,8 +38,17 @@ const getJob = catchAsync(async (req, res) => {
   return res.status(httpStatus.OK).send({ job, client: newClient, applied: !!jobProposal });
 });
 
+const getMyJobs = catchAsync(async (req, res) => {
+  const client = await clientService.findClientByUserId(req.user.id);
+  if (!client) throw new ApiError(httpStatus.NOT_FOUND, 'Client not found with the id');
+  // const totalJobs = await jobService.countMyJob(client._id);
+  const jobs = await jobService.findAllJobs(client._id);
+  return res.status(httpStatus.OK).send(jobs);
+});
+
 module.exports = {
   addJob,
   getJob,
   getJobs,
+  getMyJobs,
 };
