@@ -12,11 +12,20 @@ const createProposal = (proposalBody) => {
 
 /**
  * get proposal by freelancer id
- * @param {Object} freelancerId
+ * @param {ObjectId} freelancerId
  * @returns {Promise<Proposal>}
  */
 const findProposalByFreelancerId = (freelancerId) => {
   return Proposal.findOne({ freelancerId: freelancerId });
+};
+
+/**
+ * get proposal by freelancer id
+ * @param {ObjectId} proposalId
+ * @returns {Promise<Proposal>}
+ */
+const findById = (proposalId) => {
+  return Proposal.findById(proposalId);
 };
 
 /**
@@ -88,6 +97,55 @@ const findAllProposals = (freelancerId) => {
 };
 
 /**
+ * find user all proposals
+ * @param {ObjectId} jobId
+ * @param {ObjectId} freelancerId
+ * @returns {Promise<Proposal>}
+ */
+const getProposal = (proposalId) => {
+  return Proposal.aggregate([
+    {
+      $match: {
+        _id: mongoose.Types.ObjectId(proposalId),
+      },
+    },
+    {
+      $lookup: {
+        from: 'jobs',
+        localField: 'jobId',
+        foreignField: '_id',
+        as: 'job',
+      },
+    },
+    {
+      $unwind: '$job',
+    },
+    {
+      $lookup: {
+        from: 'clients',
+        localField: 'job.clientId',
+        foreignField: '_id',
+        as: 'client',
+      },
+    },
+    {
+      $unwind: '$client',
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'client.userId',
+        foreignField: '_id',
+        as: 'user',
+      },
+    },
+    {
+      $unwind: '$user',
+    },
+  ]);
+};
+
+/**
  * count user all proposals
  * @param {ObjectId} freelancerId
  * @returns {Promise<Proposal>}
@@ -97,6 +155,8 @@ const countProposals = (freelancerId) => {
 };
 
 module.exports = {
+  findById,
+  getProposal,
   createProposal,
   findAllProposals,
   countProposals,

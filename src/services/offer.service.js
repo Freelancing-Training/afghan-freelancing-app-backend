@@ -48,15 +48,37 @@ const countOffers = (freelancerId) => {
 
 /**
  * get Offer by freelancer id
- * @param {Object} freelancerId
+ * @param {ObjectId} freelancerId
  * @returns {Promise<Offer>}
  */
 const findOfferByFreelancerId = (freelancerId) => {
   return Offer.findOne({ freelancerId: freelancerId });
 };
 
+/**
+ * find a offer by id
+ * @param {ObjectId} offerId
+ * @returns {Promise<Offer>}
+ */
+const findById = (offerId) => {
+  return Offer.findById(offerId);
+};
+
+/**
+ * Update offer
+ * @param {ObjectId} offer
+ * @param {Object} updateBody
+ * @returns {Promise<Offer>}
+ */
+const updateOffer = (offer, updateBody) => {
+  Object.assign(offer, updateBody);
+  return offer.save();
+};
+
 module.exports = {
+  findById,
   createOffer,
+  updateOffer,
   findAllOffers,
   countOffers,
   findOfferByJobId,

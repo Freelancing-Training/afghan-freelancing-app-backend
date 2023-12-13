@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { freelancerService, proposalService, offerService } = require('../services');
+const { freelancerService, proposalService, offerService, jobService } = require('../services');
 const ApiError = require('../utils/ApiError');
 
 const createProposal = catchAsync(async (req, res) => {
@@ -33,11 +33,19 @@ const getProfosalsAndOffers = catchAsync(async (req, res) => {
       categories: proposals,
     },
   ];
-  console.log({ proposals });
   return res.status(httpStatus.OK).send(result);
 });
 
+const getProposal = catchAsync(async (req, res) => {
+  const { proposalId } = req.params;
+  const proposal = await proposalService.findById(proposalId);
+  if (!proposal) throw new ApiError(httpStatus.NOT_FOUND, 'Proposal not found');
+  const result = await proposalService.getProposal(proposalId);
+  return res.status(httpStatus.CREATED).send(result[0]);
+});
+
 module.exports = {
+  getProposal,
   createProposal,
   getProfosalsAndOffers,
 };

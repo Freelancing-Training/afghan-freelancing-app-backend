@@ -11,4 +11,6 @@ router
   .post(auth(), validate(proposalValidation.createProposal), proposalController.createProposal)
   .get(auth(), validate({}), proposalController.getProfosalsAndOffers);
 
+router.route('/:proposalId').get(auth(), validate(proposalValidation.getProposal), proposalController.getProposal);
+
 module.exports = router;

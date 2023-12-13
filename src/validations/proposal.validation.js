@@ -9,6 +9,13 @@ const createProposal = {
   }),
 };
 
+const getProposal = {
+  params: Joi.object().keys({
+    proposalId: Joi.string().required().custom(objectId),
+  }),
+};
+
 module.exports = {
+  getProposal,
   createProposal,
 };

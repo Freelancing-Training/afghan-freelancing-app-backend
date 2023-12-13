@@ -22,7 +22,15 @@ const getJob = {
   }),
 };
 
+const getProposal = {
+  body: Joi.object().keys({
+    freelancerId: Joi.string().required().custom(objectId),
+    jobId: Joi.string().required().custom(objectId),
+  }),
+};
+
 module.exports = {
   getJob,
   addJob,
+  getProposal,
 };

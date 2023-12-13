@@ -13,6 +13,11 @@ const offerSchema = mongoose.Schema(
       ref: 'Job',
       required: true,
     },
+    status: {
+      type: String,
+      enum: ['accepted', 'rejected', 'pending'],
+      default: 'pending',
+    },
   },
   {
     timestamps: true,

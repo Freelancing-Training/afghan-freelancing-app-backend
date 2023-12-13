@@ -118,9 +118,21 @@ const findAllJobs = (clientId) => {
   ]);
 };
 
+/**
+ * Update job
+ * @param {ObjectId} job
+ * @param {Object} updateBody
+ * @returns {Promise<Job>}
+ */
+const updateJob = (job, updateBody) => {
+  Object.assign(job, updateBody);
+  return job.save();
+};
+
 module.exports = {
   getJobs,
   findById,
+  updateJob,
   createJob,
   queryJobs,
   countMyJob,

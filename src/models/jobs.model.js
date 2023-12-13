@@ -28,6 +28,10 @@ const jobSchema = mongoose.Schema(
         },
       },
     ],
+    assigned: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

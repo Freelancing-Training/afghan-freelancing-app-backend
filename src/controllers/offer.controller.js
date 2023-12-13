@@ -15,6 +15,28 @@ const createOffer = catchAsync(async (req, res) => {
   return res.status(httpStatus.CREATED).send(result);
 });
 
+const acceptOffer = catchAsync(async (req, res) => {
+  const offer = await offerService.findById(req.params.offerId);
+  if (!offer) throw new ApiError(httpStatus.NOT_FOUND, 'Offer not found');
+  const freelancer = await freelancerService.findFreelancerByUserId(req.user.id);
+  if (!freelancer) throw new ApiError(httpStatus.NOT_FOUND, 'Freelancer not found with the id');
+  await offerService.updateOffer(offer, { status: 'accepted' });
+  const result = await offerService.createOffer(req.body);
+  return res.status(httpStatus.CREATED).send(result);
+});
+
+const rejectOffer = catchAsync(async (req, res) => {
+  const offer = await offerService.findById(req.params.offerId);
+  if (!offer) throw new ApiError(httpStatus.NOT_FOUND, 'Offer not found');
+  const freelancer = await freelancerService.findFreelancerByUserId(req.user.id);
+  if (!freelancer) throw new ApiError(httpStatus.NOT_FOUND, 'Freelancer not found with the id');
+  await offerService.updateOffer(offer, { status: 'rejected' });
+  const result = await offerService.createOffer(req.body);
+  return res.status(httpStatus.CREATED).send(result);
+});
+
 module.exports = {
   createOffer,
+  acceptOffer,
+  rejectOffer,
 };
