@@ -1,14 +1,13 @@
 const Joi = require('joi');
 const { objectId } = require('./custom.validation');
 
-const createProposal = {
+const createOffer = {
   body: Joi.object().keys({
     jobId: Joi.string().required().custom(objectId),
-    description: Joi.string().required(),
-    rate: Joi.number().required(),
+    freelancerId: Joi.string().required(),
   }),
 };
 
 module.exports = {
-  createProposal,
+  createOffer,
 };

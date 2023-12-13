@@ -4,3 +4,4 @@ module.exports.Freelancer = require('./freelancer.model');
 module.exports.Client = require('./client.model');
 module.exports.Job = require('./jobs.model');
 module.exports.Proposal = require('./proposal.model');
+module.exports.Offer = require('./offer.model');
