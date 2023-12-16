@@ -122,25 +122,54 @@ const getProposal = (proposalId) => {
     },
     {
       $lookup: {
-        from: 'clients',
-        localField: 'job.clientId',
+        from: 'freelancers',
+        localField: 'freelancerId',
         foreignField: '_id',
-        as: 'client',
+        as: 'freelancer',
       },
     },
     {
-      $unwind: '$client',
+      $unwind: '$freelancer',
     },
     {
       $lookup: {
         from: 'users',
-        localField: 'client.userId',
+        localField: 'freelancer.userId',
         foreignField: '_id',
         as: 'user',
       },
     },
     {
       $unwind: '$user',
+    },
+    {
+      $lookup: {
+        from: 'offers',
+        let: { proposalId: '$_id' },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $eq: ['$proposalId', '$$proposalId'],
+              },
+            },
+          },
+        ],
+        as: 'offer',
+      },
+    },
+    {
+      $unwind: {
+        path: '$offer',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $addFields: {
+        offer: {
+          $ifNull: ['$offer', []],
+        },
+      },
     },
   ]);
 };

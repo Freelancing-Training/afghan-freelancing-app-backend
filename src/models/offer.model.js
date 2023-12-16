@@ -3,14 +3,9 @@ const { toJSON, paginate } = require('./plugins');
 
 const offerSchema = mongoose.Schema(
   {
-    freelancerId: {
+    proposalId: {
       type: mongoose.SchemaTypes.ObjectId,
-      ref: 'Freelancer',
-      required: true,
-    },
-    jobId: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: 'Job',
+      ref: 'Proposal',
       required: true,
     },
     status: {

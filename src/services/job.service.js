@@ -66,55 +66,6 @@ const findAllJobs = (clientId) => {
         as: 'proposals',
       },
     },
-    {
-      $unwind: {
-        path: '$proposals',
-        preserveNullAndEmptyArrays: true,
-      },
-    },
-    {
-      $lookup: {
-        from: 'freelancers',
-        localField: 'proposals.freelancerId',
-        foreignField: '_id',
-        as: 'proposals.freelancer',
-      },
-    },
-    {
-      $addFields: {
-        'proposals.photo': '$proposals.freelancer.photo',
-      },
-    },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'proposals.freelancer.userId',
-        foreignField: '_id',
-        as: 'proposals.freelancer.user',
-      },
-    },
-    {
-      $addFields: {
-        'proposals.freelancer.user': {
-          $arrayElemAt: ['$proposals.freelancer.user', 0],
-        },
-      },
-    },
-    {
-      $project: {
-        title: 1,
-        createdAt: 1,
-        proposals: 1,
-      },
-    },
-    {
-      $group: {
-        _id: '$_id',
-        title: { $first: '$title' },
-        createdAt: { $first: '$createdAt' },
-        proposals: { $push: '$proposals' }, // This includes all proposals, even if there are zero or one
-      },
-    },
   ]);
 };
 

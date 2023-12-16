@@ -41,7 +41,6 @@ const getJob = catchAsync(async (req, res) => {
 const getMyJobs = catchAsync(async (req, res) => {
   const client = await clientService.findClientByUserId(req.user.id);
   if (!client) throw new ApiError(httpStatus.NOT_FOUND, 'Client not found with the id');
-  // const totalJobs = await jobService.countMyJob(client._id);
   const jobs = await jobService.findAllJobs(client._id);
   return res.status(httpStatus.OK).send(jobs);
 });

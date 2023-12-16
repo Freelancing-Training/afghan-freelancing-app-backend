@@ -10,6 +10,15 @@ const createOffer = (offerBody) => {
 };
 
 /**
+ * find offer by proposal id
+ * @param {ObjectId} proposalId
+ * @returns {Promise<Offer>}
+ */
+const findOfferByProposalId = (proposalId) => {
+  return Offer.findOne({ proposalId });
+};
+
+/**
  * get offer by job id
  * @param {ObjectId} jobId
  * @returns {Promise<Offer>}
@@ -82,6 +91,7 @@ module.exports = {
   findAllOffers,
   countOffers,
   findOfferByJobId,
+  findOfferByProposalId,
   findFreelancerJobOffer,
   findOfferByFreelancerId,
 };
