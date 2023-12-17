@@ -1,19 +1,20 @@
 const Joi = require('joi');
 const { objectId } = require('./custom.validation');
 
-const createOffer = {
-  body: Joi.object().keys({
-    proposalId: Joi.string().required().custom(objectId),
+const getUserChat = {
+  params: Joi.object().keys({
+    userId: Joi.string().required().custom(objectId),
   }),
 };
 
-const acceptOffer = {
-  params: Joi.object().keys({
-    offerId: Joi.string().required().custom(objectId),
+const createMessage = {
+  body: Joi.object().keys({
+    receiver: Joi.string().required().custom(objectId),
+    message: Joi.string().required(),
   }),
 };
 
 module.exports = {
-  acceptOffer,
-  createOffer,
+  getUserChat,
+  createMessage,
 };

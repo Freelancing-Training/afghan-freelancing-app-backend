@@ -3,8 +3,7 @@ const { Message } = require('../models');
 /**
  * Get User chats
  * @param {ObjectId} userId
- * @param {ObjectId} senderId
- * @returns {Promise<Offer>}
+ * @returns {Promise<Message>}
  */
 const getChannels = (userId) => {
   return Message.aggregate([
@@ -50,6 +49,32 @@ const getChannels = (userId) => {
   ]);
 };
 
+/**
+ * Get User chats
+ * @param {ObjectId} senderId
+ * @param {ObjectId} recieverId
+ * @returns {Promise<Message>}
+ */
+const getUserChat = (senderId, recieverId) => {
+  return Message.find({
+    $or: [
+      { $and: [{ sender: senderId }, { receiver: recieverId }] },
+      { $and: [{ sender: recieverId }, { receiver: senderId }] },
+    ],
+  });
+};
+
+/**
+ * create User chats
+ * @param {Object} messageBody
+ * @returns {Promise<Message>}
+ */
+const createMessage = (messageBody) => {
+  return Message.create(messageBody);
+};
+
 module.exports = {
+  createMessage,
   getChannels,
+  getUserChat,
 };
