@@ -8,6 +8,7 @@ const profileRoutes = require('./profile.route');
 const jobsRoutes = require('./job.route');
 const proposalRoutes = require('./proposal.route');
 const offerRoutes = require('./offer.route');
+const messageRoutes = require('./message.route');
 
 const router = express.Router();
 
@@ -35,6 +36,10 @@ const defaultRoutes = [
   {
     path: '/offers',
     route: offerRoutes,
+  },
+  {
+    path: '/messages',
+    route: messageRoutes,
   },
 ];
 

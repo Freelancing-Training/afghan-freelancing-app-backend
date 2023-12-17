@@ -7,3 +7,4 @@ module.exports.clientService = require('./client.service');
 module.exports.jobService = require('./job.service');
 module.exports.proposalService = require('./proposal.service');
 module.exports.offerService = require('./offer.service');
+module.exports.messageService = require('./message.service');
