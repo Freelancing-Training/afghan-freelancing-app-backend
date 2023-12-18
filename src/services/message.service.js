@@ -61,7 +61,9 @@ const getUserChat = (senderId, recieverId) => {
       { $and: [{ sender: senderId }, { receiver: recieverId }] },
       { $and: [{ sender: recieverId }, { receiver: senderId }] },
     ],
-  });
+  })
+    .sort({ createdAt: 1 })
+    .lean();
 };
 
 /**

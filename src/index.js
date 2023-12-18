@@ -9,6 +9,8 @@ mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
   server = app.listen(config.port, () => {
     logger.info(`Listening to port ${config.port}`);
   });
+  // @@ initialization of socket.io
+  const io = require('./utils/io.socket').init(server);
 });
 
 const exitHandler = () => {
