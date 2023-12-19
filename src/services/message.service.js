@@ -1,4 +1,5 @@
 const { Message } = require('../models');
+const mongoose = require('mongoose');
 
 /**
  * Get User chats
@@ -9,14 +10,14 @@ const getChannels = (userId) => {
   return Message.aggregate([
     {
       $match: {
-        $or: [{ sender: userId }, { receiver: userId }],
+        $or: [{ sender: mongoose.Types.ObjectId(userId) }, { receiver: mongoose.Types.ObjectId(userId) }],
       },
     },
     {
       $project: {
         participantId: {
           $cond: {
-            if: { $eq: ['$sender', userId] },
+            if: { $eq: ['$sender', mongoose.Types.ObjectId(userId)] },
             then: '$receiver',
             else: '$sender',
           },
