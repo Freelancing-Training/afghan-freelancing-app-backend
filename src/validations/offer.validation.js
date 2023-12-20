@@ -13,7 +13,14 @@ const acceptOffer = {
   }),
 };
 
+const getOffers = {
+  query: Joi.object().keys({
+    status: Joi.string().required().valid('progress', 'canceled', 'pending', 'completed'),
+  }),
+};
+
 module.exports = {
+  getOffers,
   acceptOffer,
   createOffer,
 };

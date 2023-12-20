@@ -8,12 +8,13 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(auth(), validate(offerValidation.createOffer), offerController.createOffer)
-  .get(auth(), validate({}), offerController.getOffers);
+  .get(auth(), validate(offerValidation.getOffers), offerController.getOffers)
+  .post(auth(), validate(offerValidation.createOffer), offerController.createOffer);
 
 router
   .route('/:offerId')
-  .post(auth(), validate(offerValidation.acceptOffer), offerController.acceptOffer)
+  .get(auth(), validate(offerValidation.acceptOffer), offerController.getOffer)
+  .put(auth(), validate(offerValidation.acceptOffer), offerController.acceptOffer)
   .patch(auth(), validate(offerValidation.acceptOffer), offerController.rejectOffer);
 
 module.exports = router;

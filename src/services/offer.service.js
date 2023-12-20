@@ -41,13 +41,19 @@ const findFreelancerJobOffer = (jobId, freelancerId) => {
 /**
  * find user all Offers
  * @param {ObjectId} freelancerId
+ * @param {String} status
  * @returns {Promise<Offer>}
  */
-const findAllOffers = (freelancerId) => {
+const findAllOffers = (freelancerId, status) => {
   return Offer.aggregate([
     {
       $match: {
         freelancerId: mongoose.Types.ObjectId(freelancerId),
+      },
+    },
+    {
+      $match: {
+        status: status,
       },
     },
     {
@@ -102,7 +108,67 @@ const updateOffer = (offer, updateBody) => {
   return offer.save();
 };
 
+/**
+ * find user Offer
+ * @param {ObjectId} freelancerId
+ * @returns {Promise<Offer>}
+ */
+const getOffer = (offerId) => {
+  return Offer.aggregate([
+    {
+      $match: {
+        _id: mongoose.Types.ObjectId(offerId),
+      },
+    },
+    {
+      $lookup: {
+        from: 'jobs',
+        localField: 'jobId',
+        foreignField: '_id',
+        as: 'job',
+      },
+    },
+    {
+      $lookup: {
+        from: 'clients',
+        localField: 'clientId',
+        foreignField: '_id',
+        as: 'client',
+      },
+    },
+    {
+      $lookup: {
+        from: 'proposals',
+        localField: 'proposalId',
+        foreignField: '_id',
+        as: 'proposal',
+      },
+    },
+    {
+      $unwind: '$job',
+    },
+    {
+      $unwind: '$proposal',
+    },
+    {
+      $unwind: '$client',
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'client.userId',
+        foreignField: '_id',
+        as: 'user',
+      },
+    },
+    {
+      $unwind: '$user',
+    },
+  ]);
+};
+
 module.exports = {
+  getOffer,
   findById,
   createOffer,
   updateOffer,
