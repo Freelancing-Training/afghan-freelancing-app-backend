@@ -18,15 +18,8 @@ const getProfosalsAndOffers = catchAsync(async (req, res) => {
   if (!freelancer) throw new ApiError(httpStatus.NOT_FOUND, 'Freelancer not found with the id');
   const totalProposals = await proposalService.countProposals(freelancer._id);
   const proposals = await proposalService.findAllProposals(freelancer._id);
-  const totalOffers = await offerService.countOffers(freelancer._id);
-  const offers = await offerService.findAllOffers(freelancer._id);
 
   const result = [
-    {
-      title: 'Offers',
-      totalCount: totalOffers,
-      categories: offers,
-    },
     {
       title: 'Proposals',
       totalCount: totalProposals,

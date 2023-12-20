@@ -1,4 +1,5 @@
 const { Offer } = require('../models');
+const mongoose = require('mongoose');
 
 /**
  * Create a offer
@@ -43,7 +44,24 @@ const findFreelancerJobOffer = (jobId, freelancerId) => {
  * @returns {Promise<Offer>}
  */
 const findAllOffers = (freelancerId) => {
-  return Offer.find({ freelancerId: freelancerId });
+  return Offer.aggregate([
+    {
+      $match: {
+        freelancerId: mongoose.Types.ObjectId(freelancerId),
+      },
+    },
+    {
+      $lookup: {
+        from: 'jobs',
+        localField: 'jobId',
+        foreignField: '_id',
+        as: 'job',
+      },
+    },
+    {
+      $unwind: '$job',
+    },
+  ]);
 };
 
 /**

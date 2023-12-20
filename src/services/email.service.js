@@ -2,6 +2,43 @@ const nodemailer = require('nodemailer');
 const config = require('../config/config');
 const logger = require('../config/logger');
 
+// const mailjet = require('node-mailjet').connect(
+//   'YOUR_API_KEY', // Replace with your Mailjet API key
+//   'YOUR_API_SECRET' // Replace with your Mailjet API secret key
+// );
+
+// const emailData = {
+//   Messages: [
+//     {
+//       From: {
+//         Email: 'sender@example.com',
+//         Name: 'Sender Name',
+//       },
+//       To: [
+//         {
+//           Email: 'recipient@example.com',
+//           Name: 'Recipient Name',
+//         },
+//       ],
+//       Subject: 'Your Subject',
+//       TextPart: 'Hello, this is the plain text part of the email.',
+//       HTMLPart: '<h3>Hello, this is the HTML part of the email.</h3>',
+//     },
+//   ],
+// };
+
+const sendEmailViaMailJet = async () => {
+  try {
+    const response = await mailjet.post('send', { version: 'v3.1' }).request({
+      Messages: emailData.Messages,
+    });
+
+    console.log(response.body);
+  } catch (error) {
+    console.error('Error sending email:', error.statusCode, error.message);
+  }
+};
+
 const transport = nodemailer.createTransport(config.email.smtp);
 /* istanbul ignore next */
 if (config.env !== 'test') {

@@ -27,7 +27,12 @@ const createOffer = catchAsync(async (req, res) => {
     throw new ApiError(httpStatus.FORBIDDEN, 'You Can not send offer for this job');
   const offer = await offerService.findOfferByProposalId(proposalId);
   if (offer) throw new ApiError(httpStatus.BAD_REQUEST, 'Offer Already has been sent');
-  const result = await offerService.createOffer({ proposalId });
+  const result = await offerService.createOffer({
+    proposalId,
+    freelancerId: freelancer._id,
+    clientId: client._id,
+    jobId: job._id,
+  });
   const jsonMessage = JSON.stringify({
     sender: user._id,
     receiver: freelanceUser._id,
@@ -35,7 +40,6 @@ const createOffer = catchAsync(async (req, res) => {
   });
 
   const stringMessage = JSON.parse(jsonMessage);
-  console.log(stringMessage);
   await messageService.createMessage(stringMessage);
   return res.status(httpStatus.CREATED).send(result);
 });
@@ -60,7 +64,20 @@ const rejectOffer = catchAsync(async (req, res) => {
   return res.status(httpStatus.CREATED).send(result);
 });
 
+const getOffers = catchAsync(async (req, res) => {
+  const freelancer = await freelancerService.findFreelancerByUserId(req.user.id);
+  if (!freelancer) throw new ApiError(httpStatus.NOT_FOUND, 'Freelancer Not Found');
+  const offers = await offerService.findAllOffers(freelancer._id);
+  const result = {
+    title: 'Offers',
+    categories: offers,
+  };
+
+  return res.status(httpStatus.OK).send(result);
+});
+
 module.exports = {
+  getOffers,
   createOffer,
   acceptOffer,
   rejectOffer,
