@@ -50,14 +50,20 @@ const findFreelancerJobProposal = (jobId, freelancerId) => {
 /**
  * find user all proposals
  * @param {ObjectId} freelancerId
+ * @param {String} status
  * @returns {Promise<Proposal>}
  */
-const findAllProposals = (freelancerId) => {
+const findAllProposals = (freelancerId, status) => {
   // return Proposal.find({ freelancerId: freelancerId });
   return Proposal.aggregate([
     {
       $match: {
         freelancerId: mongoose.Types.ObjectId(freelancerId),
+      },
+    },
+    {
+      $match: {
+        status: status,
       },
     },
     {

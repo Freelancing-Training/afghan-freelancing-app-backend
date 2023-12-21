@@ -14,15 +14,13 @@ const createProposal = catchAsync(async (req, res) => {
 });
 
 const getProfosalsAndOffers = catchAsync(async (req, res) => {
+  const { status } = req.query;
   const freelancer = await freelancerService.findFreelancerByUserId(req.user.id);
   if (!freelancer) throw new ApiError(httpStatus.NOT_FOUND, 'Freelancer not found with the id');
-  const totalProposals = await proposalService.countProposals(freelancer._id);
-  const proposals = await proposalService.findAllProposals(freelancer._id);
-
+  const proposals = await proposalService.findAllProposals(freelancer._id, status);
   const result = [
     {
       title: 'Proposals',
-      totalCount: totalProposals,
       categories: proposals,
     },
   ];

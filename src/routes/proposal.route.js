@@ -8,8 +8,8 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(auth(), validate(proposalValidation.createProposal), proposalController.createProposal)
-  .get(auth(), validate({}), proposalController.getProfosalsAndOffers);
+  .get(auth(), validate(proposalValidation.getProposals), proposalController.getProfosalsAndOffers)
+  .post(auth(), validate(proposalValidation.createProposal), proposalController.createProposal);
 
 router.route('/:proposalId').get(auth(), validate(proposalValidation.getProposal), proposalController.getProposal);
 

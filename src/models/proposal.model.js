@@ -21,6 +21,11 @@ const proposalSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
+    status: {
+      type: String,
+      default: 'active',
+      enum: ['active', 'closed'],
+    },
   },
   {
     timestamps: true,

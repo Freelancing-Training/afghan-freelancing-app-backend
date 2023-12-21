@@ -11,6 +11,8 @@ router
   .get(auth(), validate(offerValidation.getOffers), offerController.getOffers)
   .post(auth(), validate(offerValidation.createOffer), offerController.createOffer);
 
+router.route('/complete/:offerId').put(auth(), validate(offerValidation.acceptOffer), offerController.completeOffer);
+
 router
   .route('/:offerId')
   .get(auth(), validate(offerValidation.acceptOffer), offerController.getOffer)
