@@ -29,8 +29,15 @@ const getProposal = {
   }),
 };
 
+const getJobs = {
+  query: Joi.object().keys({
+    status: Joi.string().required().valid('active', 'progress', 'completed'),
+  }),
+};
+
 module.exports = {
   getJob,
   addJob,
+  getJobs,
   getProposal,
 };

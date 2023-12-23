@@ -32,6 +32,11 @@ const jobSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    status: {
+      type: String,
+      enum: ['active', 'progress', 'completed'],
+      default: 'active',
+    },
   },
   {
     timestamps: true,

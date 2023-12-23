@@ -11,7 +11,7 @@ router
   .post(auth(), validate(jobValidation.addJob), jobController.addJob)
   .get(auth(), validate({}), jobController.getJobs);
 
-router.route('/me').get(auth(), validate({}), jobController.getMyJobs);
+router.route('/me').get(auth(), validate(jobValidation.getJobs), jobController.getMyJobs);
 
 router.route('/:jobId').get(auth(), validate(jobValidation.getJob), jobController.getJob);
 module.exports = router;

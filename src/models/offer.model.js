@@ -28,6 +28,10 @@ const offerSchema = mongoose.Schema(
       enum: ['progress', 'canceled', 'pending', 'completed'],
       default: 'pending',
     },
+    rate: {
+      type: Number,
+      required: true,
+    },
   },
   {
     timestamps: true,

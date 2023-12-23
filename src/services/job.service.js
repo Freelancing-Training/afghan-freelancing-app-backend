@@ -49,13 +49,19 @@ const countMyJob = (clientId) => {
 /**
  * find user all Jobs
  * @param {ObjectId} clientId
+ * @param {String} status
  * @returns {Promise<Job>}
  */
-const findAllJobs = (clientId) => {
+const findAllJobs = (clientId, status) => {
   return Job.aggregate([
     {
       $match: {
         clientId: mongoose.Types.ObjectId(clientId),
+      },
+    },
+    {
+      $match: {
+        status: status,
       },
     },
     {

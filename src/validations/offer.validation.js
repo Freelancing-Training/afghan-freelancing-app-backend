@@ -4,6 +4,7 @@ const { objectId } = require('./custom.validation');
 const createOffer = {
   body: Joi.object().keys({
     proposalId: Joi.string().required().custom(objectId),
+    rate: Joi.number().integer().required().min(1),
   }),
 };
 

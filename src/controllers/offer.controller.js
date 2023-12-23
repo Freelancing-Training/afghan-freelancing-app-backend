@@ -32,6 +32,7 @@ const createOffer = catchAsync(async (req, res) => {
     freelancerId: freelancer._id,
     clientId: client._id,
     jobId: job._id,
+    rate: req.body.rate,
   });
   const jsonMessage = JSON.stringify({
     sender: user._id,
