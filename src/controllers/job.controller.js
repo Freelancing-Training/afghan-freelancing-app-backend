@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { clientService, jobService, freelancerService, proposalService, userService } = require('../services');
+const { clientService, jobService, freelancerService, proposalService, userService, offerService } = require('../services');
 const ApiError = require('../utils/ApiError');
 const pick = require('../utils/pick');
 
@@ -46,9 +46,28 @@ const getMyJobs = catchAsync(async (req, res) => {
   return res.status(httpStatus.OK).send(jobs);
 });
 
+const acceptDelivery = catchAsync(async (req, res) => {
+  const { jobId } = req.params;
+  const job = await jobService.findById(jobId);
+  if (!job) throw new ApiError(httpStatus.NOT_FOUND, 'Job not found');
+  const { status, offerId } = req.body;
+  const offer = await offerService.findById(offerId);
+  if (!offer) throw new ApiError(httpStatus.NOT_FOUND, 'Offer not found');
+  const client = await clientService.findClientByUserId(req.user.id);
+  if (!client) throw new ApiError(httpStatus.NOT_FOUND, 'Client not found with the id');
+  if (job.clientId.toString() !== client._id.toString())
+    throw new ApiError(httpStatus.FORBIDDEN, 'You Can not update the job');
+
+  await jobService.updateJob(job, { status });
+  await offerService.updateOffer(offer, { status });
+  await proposalService.updateManyProposals(jobId);
+  return res.status(httpStatus.OK).send({});
+});
+
 module.exports = {
   addJob,
   getJob,
   getJobs,
+  acceptDelivery,
   getMyJobs,
 };
