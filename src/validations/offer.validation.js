@@ -16,7 +16,16 @@ const acceptOffer = {
 
 const getOffers = {
   query: Joi.object().keys({
-    status: Joi.string().required().valid('progress', 'canceled', 'pending', 'completed'),
+    status: Joi.string().required().valid('progress', 'canceled', 'pending', 'completed', 'delivered'),
+  }),
+};
+
+const updateOffer = {
+  params: Joi.object().keys({
+    offerId: Joi.string().required().custom(objectId),
+  }),
+  body: Joi.object().keys({
+    status: Joi.string().required().valid('progress', 'canceled', 'pending', 'completed', 'delivered'),
   }),
 };
 
@@ -24,4 +33,5 @@ module.exports = {
   getOffers,
   acceptOffer,
   createOffer,
+  updateOffer,
 };

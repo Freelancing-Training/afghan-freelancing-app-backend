@@ -31,13 +31,23 @@ const getProposal = {
 
 const getJobs = {
   query: Joi.object().keys({
-    status: Joi.string().required().valid('active', 'progress', 'completed'),
+    status: Joi.string().required().valid('active', 'progress', 'completed', 'delivered'),
   }),
 };
 
+const acceptDelivery = {
+  params: Joi.object().keys({
+    jobId: Joi.string().required().custom(objectId),
+  }),
+  body: Joi.object().keys({
+    status: Joi.string().required().valid('active', 'progress', 'completed', 'delivered'),
+    offerId: Joi.string().required().custom(objectId),
+  }),
+};
 module.exports = {
   getJob,
   addJob,
   getJobs,
   getProposal,
+  acceptDelivery,
 };

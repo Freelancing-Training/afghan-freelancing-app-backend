@@ -77,7 +77,7 @@ const findAllJobs = (clientId, status) => {
 
 /**
  * Update job
- * @param {ObjectId} job
+ * @param {Object} job
  * @param {Object} updateBody
  * @returns {Promise<Job>}
  */

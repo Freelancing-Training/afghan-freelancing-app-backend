@@ -11,12 +11,9 @@ router
   .get(auth(), validate(offerValidation.getOffers), offerController.getOffers)
   .post(auth(), validate(offerValidation.createOffer), offerController.createOffer);
 
-router.route('/complete/:offerId').put(auth(), validate(offerValidation.acceptOffer), offerController.completeOffer);
-
 router
   .route('/:offerId')
   .get(auth(), validate(offerValidation.acceptOffer), offerController.getOffer)
-  .put(auth(), validate(offerValidation.acceptOffer), offerController.acceptOffer)
-  .patch(auth(), validate(offerValidation.acceptOffer), offerController.rejectOffer);
+  .put(auth(), validate(offerValidation.updateOffer), offerController.updateOffer);
 
 module.exports = router;

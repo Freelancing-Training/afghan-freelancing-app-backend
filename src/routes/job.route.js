@@ -13,5 +13,8 @@ router
 
 router.route('/me').get(auth(), validate(jobValidation.getJobs), jobController.getMyJobs);
 
-router.route('/:jobId').get(auth(), validate(jobValidation.getJob), jobController.getJob);
+router
+  .route('/:jobId')
+  .get(auth(), validate(jobValidation.getJob), jobController.getJob)
+  .put(auth(), validate(jobValidation.acceptDelivery), jobController.acceptDelivery);
 module.exports = router;

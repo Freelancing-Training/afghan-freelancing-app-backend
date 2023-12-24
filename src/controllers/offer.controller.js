@@ -41,26 +41,22 @@ const createOffer = catchAsync(async (req, res) => {
   });
 
   const stringMessage = JSON.parse(jsonMessage);
+  await jobService.updateJob(job, { status: 'progress' });
   await messageService.createMessage(stringMessage);
   return res.status(httpStatus.CREATED).send(result);
 });
 
-const acceptOffer = catchAsync(async (req, res) => {
+const updateOffer = catchAsync(async (req, res) => {
   const offer = await offerService.findById(req.params.offerId);
   if (!offer) throw new ApiError(httpStatus.NOT_FOUND, 'Offer not found');
   const freelancer = await freelancerService.findFreelancerByUserId(req.user.id);
   if (!freelancer) throw new ApiError(httpStatus.NOT_FOUND, 'Freelancer not found with the id');
-  const result = await offerService.updateOffer(offer, { status: 'progress' });
-  return res.status(httpStatus.CREATED).send(result);
-});
-
-const rejectOffer = catchAsync(async (req, res) => {
-  const offer = await offerService.findById(req.params.offerId);
-  if (!offer) throw new ApiError(httpStatus.NOT_FOUND, 'Offer not found');
-  const freelancer = await freelancerService.findFreelancerByUserId(req.user.id);
-  if (!freelancer) throw new ApiError(httpStatus.NOT_FOUND, 'Freelancer not found with the id');
-  await offerService.updateOffer(offer, { status: 'canceled' });
-  const result = await offerService.createOffer(req.body);
+  const job = await jobService.findById(offer.jobId);
+  const { status } = req.body;
+  if (status !== 'cancel') {
+    await jobService.updateJob(job, { status });
+  }
+  const result = await offerService.updateOffer(offer, { status: status });
   return res.status(httpStatus.CREATED).send(result);
 });
 
@@ -89,20 +85,9 @@ const getOffer = catchAsync(async (req, res) => {
   return res.status(httpStatus.OK).send(result);
 });
 
-const completeOffer = catchAsync(async (req, res) => {
-  const offer = await offerService.findById(req.params.offerId);
-  if (!offer) throw new ApiError(httpStatus.NOT_FOUND, 'Offer not found');
-  const freelancer = await freelancerService.findFreelancerByUserId(req.user.id);
-  if (!freelancer) throw new ApiError(httpStatus.NOT_FOUND, 'Freelancer not found with the id');
-  const result = await offerService.updateOffer(offer, { status: 'completed' });
-  return res.status(httpStatus.CREATED).send(result);
-});
-
 module.exports = {
   getOffer,
   getOffers,
   createOffer,
-  acceptOffer,
-  rejectOffer,
-  completeOffer,
+  updateOffer,
 };

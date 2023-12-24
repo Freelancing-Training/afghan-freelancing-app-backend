@@ -11,6 +11,15 @@ const createProposal = (proposalBody) => {
 };
 
 /**
+ * update many proposals
+ * @param {ObjectId} jobId
+ * @returns {Promise<Proposal>}
+ */
+const updateManyProposals = (jobId) => {
+  return Proposal.updateMany({ jobId }, { $set: { status: 'cleared' } });
+};
+
+/**
  * get proposal by freelancer id
  * @param {ObjectId} freelancerId
  * @returns {Promise<Proposal>}
@@ -196,6 +205,7 @@ module.exports = {
   findAllProposals,
   countProposals,
   findProposalByJobId,
+  updateManyProposals,
   findFreelancerJobProposal,
   findProposalByFreelancerId,
 };
