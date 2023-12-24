@@ -99,6 +99,10 @@ const freelancerSchema = mongoose.Schema(
     street: String,
     zipCode: String,
     phoneNumber: String,
+    budget: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,

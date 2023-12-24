@@ -9,7 +9,7 @@ const router = express.Router();
 router
   .route('/')
   .post(auth(), validate(jobValidation.addJob), jobController.addJob)
-  .get(auth(), validate({}), jobController.getJobs);
+  .get(auth(), validate(jobValidation.queryJobs), jobController.getJobs);
 
 router.route('/me').get(auth(), validate(jobValidation.getJobs), jobController.getMyJobs);
 

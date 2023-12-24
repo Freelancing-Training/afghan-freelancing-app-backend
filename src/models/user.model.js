@@ -41,7 +41,7 @@ const userSchema = mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['freelancer', 'client'],
+      enum: ['freelancer', 'client', 'admin'],
       default: 'freelancer',
     },
     isEmailVerified: {

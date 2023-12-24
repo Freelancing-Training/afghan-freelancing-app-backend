@@ -44,10 +44,22 @@ const acceptDelivery = {
     offerId: Joi.string().required().custom(objectId),
   }),
 };
+
+const queryJobs = {
+  query: Joi.object().keys({
+    name: Joi.string(),
+    role: Joi.string(),
+    sortBy: Joi.string(),
+    limit: Joi.number().integer(),
+    page: Joi.number().integer(),
+  }),
+};
+
 module.exports = {
   getJob,
   addJob,
   getJobs,
   getProposal,
+  queryJobs,
   acceptDelivery,
 };

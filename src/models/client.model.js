@@ -8,6 +8,10 @@ const clientSchema = mongoose.Schema(
       ref: 'User',
       required: true,
     },
+    budget: {
+      type: Number,
+      default: 100,
+    },
   },
   {
     timestamps: true,
