@@ -16,7 +16,7 @@ const createProposal = (proposalBody) => {
  * @returns {Promise<Proposal>}
  */
 const updateManyProposals = (jobId) => {
-  return Proposal.updateMany({ jobId }, { $set: { status: 'cleared' } });
+  return Proposal.updateMany({ jobId }, { $set: { status: 'closed' } });
 };
 
 /**

@@ -23,8 +23,8 @@ const proposalSchema = mongoose.Schema(
     },
     status: {
       type: String,
-      default: 'active',
       enum: ['active', 'closed'],
+      default: 'active',
     },
   },
   {

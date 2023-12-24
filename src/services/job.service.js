@@ -76,6 +76,51 @@ const findAllJobs = (clientId, status) => {
 };
 
 /**
+ * find only accepted offer jobs
+ * @param {ObjectId} clientId
+ * @param {String} status
+ * @returns {Promise<Job>}
+ */
+const findOnlyAcceptedOffers = (clientId, status) => {
+  return Job.aggregate([
+    {
+      $match: {
+        clientId: mongoose.Types.ObjectId(clientId),
+      },
+    },
+    {
+      $match: {
+        status: status,
+      },
+    },
+    {
+      $lookup: {
+        from: 'offers',
+        localField: '_id',
+        foreignField: 'jobId',
+        as: 'offer',
+      },
+    },
+    {
+      $unwind: '$offer',
+    },
+    {
+      $match: {
+        'offer.status': status,
+      },
+    },
+    {
+      $lookup: {
+        from: 'proposals',
+        localField: 'offer.proposalId',
+        foreignField: '_id',
+        as: 'proposals',
+      },
+    },
+  ]);
+};
+
+/**
  * Update job
  * @param {Object} job
  * @param {Object} updateBody
@@ -94,4 +139,5 @@ module.exports = {
   queryJobs,
   countMyJob,
   findAllJobs,
+  findOnlyAcceptedOffers,
 };
