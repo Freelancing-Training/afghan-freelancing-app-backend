@@ -6,3 +6,4 @@ module.exports.Job = require('./jobs.model');
 module.exports.Proposal = require('./proposal.model');
 module.exports.Offer = require('./offer.model');
 module.exports.Message = require('./message.model');
+module.exports.TempToken = require('./tempToken.model');

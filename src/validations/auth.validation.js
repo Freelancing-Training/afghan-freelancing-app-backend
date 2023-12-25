@@ -47,8 +47,10 @@ const resetPassword = {
 };
 
 const verifyEmail = {
-  query: Joi.object().keys({
-    token: Joi.string().required(),
+  body: Joi.object().keys({
+    code: Joi.string()
+      .length(6)
+      .pattern(/^[0-9]+$/),
   }),
 };
 
