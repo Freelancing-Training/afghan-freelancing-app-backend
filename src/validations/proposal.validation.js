@@ -17,7 +17,7 @@ const getProposal = {
 
 const getProposals = {
   query: Joi.object().keys({
-    status: Joi.string().required().valid('active', 'cleared'),
+    status: Joi.string().required().valid('active', 'closed'),
   }),
 };
 

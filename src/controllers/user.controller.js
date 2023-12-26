@@ -3,6 +3,7 @@ const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const { userService } = require('../services');
+const { Freelancer } = require('../models');
 
 const createUser = catchAsync(async (req, res) => {
   const user = await userService.createUser(req.body);
@@ -10,10 +11,30 @@ const createUser = catchAsync(async (req, res) => {
 });
 
 const getUsers = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['name', 'role']);
+  const { firstName } = req.query;
+  req.query.role = 'freelancer';
+  const filter = pick(req.query, ['firstName', 'role']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
+  if (firstName) filter.firstName = new RegExp(`^${firstName}`, 'i');
   const result = await userService.queryUsers(filter, options);
-  res.send(result);
+  const userIds = result.results.map((result) => result._id);
+  const freelancerDetails = await Freelancer.find({ userId: { $in: userIds } });
+  const freelancerDetailsMap = {};
+  freelancerDetails.forEach((freelancer) => {
+    freelancerDetailsMap[freelancer.userId] = freelancer;
+  });
+  const resultsWithFreelancerDetails = result.results.map((result) => ({
+    ...result,
+    freelancer: freelancerDetailsMap[result._id] || null,
+  }));
+  const final = {
+    page: result.page,
+    limit: result.limit,
+    totalPages: result.totalPages,
+    results: resultsWithFreelancerDetails,
+  };
+
+  return res.status(httpStatus.OK).send(final);
 });
 
 const getUser = catchAsync(async (req, res) => {

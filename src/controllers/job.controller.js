@@ -15,6 +15,7 @@ const addJob = catchAsync(async (req, res) => {
 const getJobs = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['name', 'role']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
+  filter.status = { $ne: 'completed' };
   const jobs = await jobService.queryJobs(filter, options);
   return res.json(jobs);
 });
