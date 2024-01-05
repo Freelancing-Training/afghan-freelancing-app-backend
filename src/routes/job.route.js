@@ -12,6 +12,7 @@ router
   .get(auth(), validate(jobValidation.queryJobs), jobController.getJobs);
 
 router.route('/me').get(auth(), validate(jobValidation.getJobs), jobController.getMyJobs);
+router.route('/me/alls').get(auth(), validate(jobValidation.getAllJobs), jobController.getMyAllJobs);
 
 router
   .route('/:jobId')

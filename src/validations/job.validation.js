@@ -55,11 +55,18 @@ const queryJobs = {
   }),
 };
 
+const getAllJobs = {
+  query: Joi.object().keys({
+    status: Joi.string().valid('active', 'progress', 'completed', 'delivered'),
+  }),
+};
+
 module.exports = {
   getJob,
   addJob,
   getJobs,
   getProposal,
   queryJobs,
+  getAllJobs,
   acceptDelivery,
 };

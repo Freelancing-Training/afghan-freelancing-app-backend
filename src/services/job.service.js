@@ -131,6 +131,13 @@ const updateJob = (job, updateBody) => {
   return job.save();
 };
 
+/**
+ * Update job
+ * @param {ObjectId} freelancerId
+ * @returns {Promise<Job>}
+ */
+const findFreelancerAllJobs = (freelancerId) => {};
+
 module.exports = {
   getJobs,
   findById,

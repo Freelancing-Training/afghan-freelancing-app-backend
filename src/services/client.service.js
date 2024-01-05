@@ -27,8 +27,20 @@ const findById = (id) => {
   return Client.findById(id);
 };
 
+/**
+ * Update client by id
+ * @param {Client} client
+ * @param {Object} updateBody
+ * @returns {Promise<Client>}
+ */
+const updateClient = (client, updateBody) => {
+  Object.assign(client, updateBody);
+  return client.save();
+};
+
 module.exports = {
   findById,
   createClient,
+  updateClient,
   findClientByUserId,
 };

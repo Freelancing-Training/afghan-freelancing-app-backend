@@ -60,19 +60,30 @@ const acceptDelivery = catchAsync(async (req, res) => {
   if (!offer) throw new ApiError(httpStatus.NOT_FOUND, 'Offer not found');
   const client = await clientService.findClientByUserId(req.user.id);
   if (!client) throw new ApiError(httpStatus.NOT_FOUND, 'Client not found with the id');
+  const freelancer = await freelancerService.findById(offer.freelancerId);
   if (job.clientId.toString() !== client._id.toString())
-    throw new ApiError(httpStatus.FORBIDDEN, 'You Can not update the job');
+    throw new ApiError(httpStatus.FORBIDDEN, 'You Can not complete the job');
 
   await jobService.updateJob(job, { status });
   await offerService.updateOffer(offer, { status });
   await proposalService.updateManyProposals(jobId);
+  await clientService.updateClient(client, { budget: client.budget - offer.rate });
+  await freelancerService.updateFreelancerById(freelancer, { budget: freelancer.budget + offer.rate });
   return res.status(httpStatus.OK).send({});
+});
+
+const getMyAllJobs = catchAsync(async (req, res) => {
+  const freelancer = await freelancerService.findFreelancerByUserId(req.user.id);
+  if (!freelancer) throw new ApiError(httpStatus.NOT_FOUND, 'freelancer not found with the id');
+  const jobs = await jobService.findFreelancerAllJobs;
+  return res.status(httpStatus.OK).send(jobs);
 });
 
 module.exports = {
   addJob,
   getJob,
   getJobs,
-  acceptDelivery,
   getMyJobs,
+  getMyAllJobs,
+  acceptDelivery,
 };
