@@ -2,15 +2,11 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const { toJSON, paginate } = require('./plugins');
+const { roles } = require('../config/roles');
 
 const userSchema = mongoose.Schema(
   {
-    firstName: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    lastName: {
+    name: {
       type: String,
       required: true,
       trim: true,
@@ -41,16 +37,12 @@ const userSchema = mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['freelancer', 'client', 'admin'],
-      default: 'freelancer',
+      enum: roles,
+      default: 'user',
     },
     isEmailVerified: {
       type: Boolean,
       default: false,
-    },
-    acceptTerms: {
-      type: Boolean,
-      default: true,
     },
   },
   {

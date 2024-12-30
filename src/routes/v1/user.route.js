@@ -1,15 +1,19 @@
 const express = require('express');
-const auth = require('../middlewares/auth');
-const validate = require('../middlewares/validate');
-const userValidation = require('../validations/user.validation');
-const userController = require('../controllers/user.controller');
+const auth = require('../../middlewares/auth');
+const validate = require('../../middlewares/validate');
+const userValidation = require('../../validations/user.validation');
+const userController = require('../../controllers/user.controller');
 
 const router = express.Router();
 
 router
   .route('/')
   .post(auth('manageUsers'), validate(userValidation.createUser), userController.createUser)
-  .get(auth(), validate(userValidation.getUsers), userController.getUsers);
+  .get(auth('getUsers'), validate(userValidation.getUsers), userController.getUsers);
+
+// get active identifier
+router.route('/identifier').get(auth(), validate(userValidation.getIdentifier), userController.getIdentifier);
+router.route('/validate').post(validate(userValidation.validateUser), userController.validateUser);
 
 router
   .route('/:userId')

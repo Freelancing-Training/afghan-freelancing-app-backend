@@ -12,13 +12,11 @@ const createUser = {
 
 const getUsers = {
   query: Joi.object().keys({
-    firstName: Joi.string(),
-    lastName: Joi.string(),
+    name: Joi.string(),
     role: Joi.string(),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
     page: Joi.number().integer(),
-    talent: Joi.string(),
   }),
 };
 
@@ -47,10 +45,23 @@ const deleteUser = {
   }),
 };
 
+const getIdentifier = {
+  params: Joi.object().keys({}).empty(),
+  query: Joi.object().keys({}).empty(),
+};
+
+const validateUser = {
+  body: Joi.object().keys({
+    data: Joi.string().required(),
+  }),
+};
+
 module.exports = {
-  createUser,
-  getUsers,
   getUser,
+  getUsers,
   updateUser,
   deleteUser,
+  createUser,
+  getIdentifier,
+  validateUser,
 };

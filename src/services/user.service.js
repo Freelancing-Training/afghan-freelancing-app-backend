@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { User } = require('../models');
+const { User, Identifier } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -79,11 +79,62 @@ const deleteUserById = async (userId) => {
   return user;
 };
 
+/**
+ * create identifier
+ * @param {Object} identifierBody
+ * @returns {Promise<Identifier>}
+ */
+const createIdentifier = (identifierBody) => {
+  return Identifier.create(identifierBody);
+};
+
+/**
+ * add new identifier
+ * @param {Object} userId
+ * @param {Object} identifierBody
+ * @returns {Promise<Identifier>}
+ */
+const addIdentifier = (userId, newIdentifier) => {
+  return Identifier.updateOne({ userId }, { $push: { identifiers: newIdentifier } });
+};
+
+/**
+ * get identifier
+ * @param {ObjectId} userId
+ * @returns {Promise<Identifier>}
+ */
+const getIdentifier = (userId) => {
+  return Identifier.findOne({ userId, active: true });
+};
+
+/**
+ * Get all identifiers for a user, sorted by latest first
+ * @param {ObjectId} userId
+ * @returns {Promise<Identifier[]>}
+ */
+const getAllIdentifiers = (userId) => {
+  return Identifier.find({ userId }).sort({ createdAt: -1 });
+};
+
+/**
+ * update all identifiers for a user, should be inactive
+ * @param {ObjectId} userId
+ * @returns {Promise<Identifier[]>}
+ */
+const updateAllIdentifiers = (userId) => {
+  return Identifier.updateMany({ userId }, { $set: { active: false } });
+};
+
 module.exports = {
   createUser,
   queryUsers,
   getUserById,
+  createIdentifier,
   getUserByEmail,
   updateUserById,
   deleteUserById,
+  addIdentifier,
+  getIdentifier,
+  getAllIdentifiers,
+  updateAllIdentifiers,
 };

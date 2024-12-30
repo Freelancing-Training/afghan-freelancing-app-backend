@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 const app = require('./app');
 const config = require('./config/config');
 const logger = require('./config/logger');
+const Socket = require('./utils/socket.io');
+const { socketMiddleware } = require('./middlewares/socket');
+const { socketController } = require('./controllers');
 
 let server;
 mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
@@ -9,8 +12,19 @@ mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
   server = app.listen(config.port, () => {
     logger.info(`Listening to port ${config.port}`);
   });
-  // @@ initialization of socket.io
-  const io = require('./utils/io.socket').init(server);
+  // initialization of socket.io
+  Socket.initialize(server);
+  // authentication socket requests
+  Socket.socket.use((socket, next) => socketMiddleware(socket, next));
+  // socket events
+  Socket.socket.on('connection', (socket) => {
+    const socketId = socket.id;
+    socketController.createNewConnection(socket);
+
+    socket.on('disconnect', () => {
+      socketController.disconnection(socketId);
+    });
+  });
 });
 
 const exitHandler = () => {

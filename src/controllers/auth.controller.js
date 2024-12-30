@@ -1,22 +1,14 @@
+const { v4: uuidv4 } = require('uuid');
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { authService, userService, tokenService, emailService, freelancerService, clientService } = require('../services');
-const ApiError = require('../utils/ApiError');
+const { authService, userService, tokenService, emailService } = require('../services');
 
-const registerFreelancer = catchAsync(async (req, res) => {
+const register = catchAsync(async (req, res) => {
   const user = await userService.createUser(req.body);
-
-  if (req.body.role === 'freelancer') {
-    const freelancerBody = { userId: user._id };
-    await freelancerService.createFreelancer(freelancerBody);
-  } else if (req.body.role === 'client') {
-    const clientBody = { userId: user._id };
-    await clientService.createClient(clientBody);
-  }
-
   const tokens = await tokenService.generateAuthTokens(user);
-  await emailService.sendVerificationEmail(user.email, user.firstName, user._id);
-  res.status(httpStatus.CREATED).send({ user, tokens });
+  const uniqueId = `${uuidv4()}_${user._id}_${Date.now()}`;
+  await userService.createIdentifier({ userId: user._id, identifierId: uniqueId });
+  return res.status(httpStatus.CREATED).send({ user, tokens });
 });
 
 const login = catchAsync(async (req, res) => {
@@ -54,21 +46,17 @@ const sendVerificationEmail = catchAsync(async (req, res) => {
 });
 
 const verifyEmail = catchAsync(async (req, res) => {
-  const { code } = req.body;
-  const { id } = req.user;
-  const token = await emailService.getTempToken(code, id);
-  const result = await userService.updateUserById(id, { isEmailVerified: true });
-  await emailService.deleteTemporaryToken(token);
-  res.status(httpStatus.ACCEPTED).send(result);
+  await authService.verifyEmail(req.query.token);
+  res.status(httpStatus.NO_CONTENT).send();
 });
 
 module.exports = {
+  register,
   login,
   logout,
-  verifyEmail,
   refreshTokens,
-  resetPassword,
   forgotPassword,
+  resetPassword,
   sendVerificationEmail,
-  registerFreelancer,
+  verifyEmail,
 };

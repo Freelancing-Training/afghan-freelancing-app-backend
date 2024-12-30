@@ -2,13 +2,7 @@ const express = require('express');
 const authRoute = require('./auth.route');
 const userRoute = require('./user.route');
 const docsRoute = require('./docs.route');
-const config = require('../config/config');
-const freelancerRoutes = require('./freelancer.route');
-const profileRoutes = require('./profile.route');
-const jobsRoutes = require('./job.route');
-const proposalRoutes = require('./proposal.route');
-const offerRoutes = require('./offer.route');
-const messageRoutes = require('./message.route');
+const config = require('../../config/config');
 
 const router = express.Router();
 
@@ -20,26 +14,6 @@ const defaultRoutes = [
   {
     path: '/users',
     route: userRoute,
-  },
-  {
-    path: '/jobs',
-    route: jobsRoutes,
-  },
-  {
-    path: '/profile',
-    route: profileRoutes,
-  },
-  {
-    path: '/proposals',
-    route: proposalRoutes,
-  },
-  {
-    path: '/offers',
-    route: offerRoutes,
-  },
-  {
-    path: '/messages',
-    route: messageRoutes,
   },
 ];
 

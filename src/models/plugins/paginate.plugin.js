@@ -50,7 +50,7 @@ const paginate = (schema) => {
       });
     }
 
-    docsPromise = docsPromise.lean().exec();
+    docsPromise = docsPromise.exec();
 
     return Promise.all([countPromise, docsPromise]).then((values) => {
       const [totalResults, results] = values;
